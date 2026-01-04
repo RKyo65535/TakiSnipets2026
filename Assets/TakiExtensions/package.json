@@ -1,0 +1,17 @@
+{
+  "name": "com.taki.extensions",
+  "version": "0.1.0",
+  "displayName": "Taki Extensions",
+  "description": "A collection of useful extensions and components for Unity.",
+  "unity": "6000.3",
+  "author": {
+    "name": "Taki"
+  },
+  "samples": [
+    {
+      "displayName": "Sample Scenes",
+      "description": "Example scenes and scripts showing how to use the extensions.",
+      "path": "Samples~"
+    }
+  ]
+}
