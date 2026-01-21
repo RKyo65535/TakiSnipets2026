@@ -18,15 +18,15 @@ namespace ThisGame.Component.Audio
     public class SoundAdjustment : MonoBehaviour
     {
         [SerializeField] AudioMixer mixer;
-        public const string mixerParameter_BGMVolume = "BGMVolume";
-        public const string mixerParameter_SEVolume = "SEVolume";
+        public const float DefaultVolume = 0.8f;
+        public const string MixerParameterBGMVolume = "BGMVolume";
+        public const string MixerParameterSeVolume = "SEVolume";
 
         [SerializeField] Slider BGMSlider;
         [SerializeField] Slider SESlider;
         [SerializeField] AudioSource SETestAudio;
         [SerializeField] GameObject ButtonObject;
 
-        private const float DEFAULT_VOLUME = 0.8f;
 
         private void Awake()
         {
@@ -72,8 +72,8 @@ namespace ThisGame.Component.Audio
         // PlayerPrefs から読み込み、スライダーとMixerに反映
         private void LoadVolume()
         {
-            float bgmVolume = PlayerPrefs.GetFloat(mixerParameter_BGMVolume, DEFAULT_VOLUME);
-            float seVolume = PlayerPrefs.GetFloat(mixerParameter_SEVolume, DEFAULT_VOLUME);
+            float bgmVolume = PlayerPrefs.GetFloat(MixerParameterBGMVolume, DefaultVolume);
+            float seVolume = PlayerPrefs.GetFloat(MixerParameterSeVolume, DefaultVolume);
 
             if (BGMSlider != null)
             {
@@ -81,7 +81,7 @@ namespace ThisGame.Component.Audio
                 BGMSlider.value = bgmVolume;
                 if (mixer != null)
                 {
-                    mixer.SetFloat(mixerParameter_BGMVolume, Liner2dB(bgmVolume));
+                    mixer.SetFloat(MixerParameterBGMVolume, Liner2dB(bgmVolume));
                 }
             }
 
@@ -90,7 +90,7 @@ namespace ThisGame.Component.Audio
                 SESlider.value = seVolume;
                 if (mixer != null)
                 {
-                    mixer.SetFloat(mixerParameter_SEVolume, Liner2dB(seVolume));
+                    mixer.SetFloat(MixerParameterSeVolume, Liner2dB(seVolume));
                 }
             }
         }
@@ -100,12 +100,12 @@ namespace ThisGame.Component.Audio
         {
             if (BGMSlider != null)
             {
-                PlayerPrefs.SetFloat(mixerParameter_BGMVolume, BGMSlider.value);
+                PlayerPrefs.SetFloat(MixerParameterBGMVolume, BGMSlider.value);
             }
 
             if (SESlider != null)
             {
-                PlayerPrefs.SetFloat(mixerParameter_SEVolume, SESlider.value);
+                PlayerPrefs.SetFloat(MixerParameterSeVolume, SESlider.value);
             }
 
             PlayerPrefs.Save();
@@ -114,25 +114,24 @@ namespace ThisGame.Component.Audio
         void BGMChanged(float slider)
         {
             if (mixer == null) return;
-            mixer.SetFloat(mixerParameter_BGMVolume, Liner2dB(slider));
+            mixer.SetFloat(MixerParameterBGMVolume, Liner2dB(slider));
 
             // 値が変わったら即時保存
-            PlayerPrefs.SetFloat(mixerParameter_BGMVolume, slider);
+            PlayerPrefs.SetFloat(MixerParameterBGMVolume, slider);
             PlayerPrefs.Save();
         }
 
         void SEChanged(float slider)
         {
             if (mixer == null) return;
-            mixer.SetFloat(mixerParameter_SEVolume, Liner2dB(slider));
+            mixer.SetFloat(MixerParameterSeVolume, Liner2dB(slider));
 
             // 値が変わったら即時保存
-            PlayerPrefs.SetFloat(mixerParameter_SEVolume, slider);
+            PlayerPrefs.SetFloat(MixerParameterSeVolume, slider);
             PlayerPrefs.Save();
         }
-
-
-        float Liner2dB(float liner)
+        
+        public static float Liner2dB(float liner)
         {
             if (liner < 0.001f)
             {
@@ -140,8 +139,5 @@ namespace ThisGame.Component.Audio
             }
             return 20 * Mathf.Log10(liner);
         }
-
-
     }
-
 }
